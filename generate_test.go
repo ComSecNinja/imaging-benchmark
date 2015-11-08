@@ -2,6 +2,8 @@ package benchmark
 
 import (
     "fmt"
+    "os"
+    "image/png"
     "testing"
     "time"
 )
@@ -16,8 +18,8 @@ var (
     Δt              time.Duration
 )
 
-// Generate base image
 func TestBenchmark(test *testing.T) {
+    // Generate base image
     t = time.Now()
     fmt.Printf("Generating %d×%d image... ", srcW, srcH)
     img := GenerateImage(srcW, srcH)
