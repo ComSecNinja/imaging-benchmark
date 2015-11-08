@@ -6,11 +6,7 @@ import (
 	"time"
 )
 
-var (
-	t       time.Time
-	Δt      time.Duration
-	filters map[string]imaging.ResampleFilter
-)
+var filters map[string]imaging.ResampleFilter
 
 func init() {
 	filters = make(map[string]imaging.ResampleFilter)
@@ -50,7 +46,12 @@ type result struct {
 }
 
 func Benchmark(img image.Image, rounds int, targets ...Size) (results Results) {
+	var (
+		t  time.Time
+		Δt time.Duration
+	)
 	results = make(map[string][]result)
+
 	for name, filter := range filters {
 		for _, target := range targets {
 			var (
@@ -60,10 +61,16 @@ func Benchmark(img image.Image, rounds int, targets ...Size) (results Results) {
 			r.Size = target
 			for i := 0; i < rounds; i++ {
 				// Take resizing time
+			resize:
 				t = time.Now()
 				imaging.Resize(img, target[0], target[1], filter)
-				// For some reason NearestNeighbor sometimes gets zero duration?
-				Δt = time.Since(t) + time.Nanosecond // Add an extra nanosecond.
+				Δt = time.Since(t)
+				// FIXME:
+				// For some reason NearestNeighbor sometimes gets zero duration.
+				// If this happens, we'll just try again, I guess.
+				if Δt == 0 {
+					goto resize
+				}
 
 				// Set min & max if need be.
 				if r.Min == 0 || Δt < r.Min {

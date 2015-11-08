@@ -12,10 +12,10 @@ const (
 )
 
 func TestBenchmark(test *testing.T) {
-	t = time.Now()                                       // Get set..
+	t := time.Now()                                      // Get set..
 	fmt.Printf("Generating %d×%d image... ", srcW, srcH) // Print dimensions.
 	img := GenerateImage(srcW, srcH)                     // Generate image full of noise.
-	Δt = time.Since(t)                                   // Take time's delta.
+	Δt := time.Since(t)                                  // Take time's delta.
 	fmt.Printf("it took %v.\n", Δt)                      // Print it.
 
 	// Set some target sizes.
