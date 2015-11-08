@@ -50,7 +50,7 @@ type result struct {
 }
 
 func Benchmark(img image.Image, rounds int, targets ...Size) (results Results) {
-    results = make(map[string][]result)
+	results = make(map[string][]result)
 	for name, filter := range filters {
 		for _, target := range targets {
 			var (
@@ -62,7 +62,7 @@ func Benchmark(img image.Image, rounds int, targets ...Size) (results Results) {
 				// Take resizing time
 				t = time.Now()
 				imaging.Resize(img, target[0], target[1], filter)
-                // For some reason NearestNeighbor sometimes gets zero duration?
+				// For some reason NearestNeighbor sometimes gets zero duration?
 				Δt = time.Since(t) + time.Nanosecond // Add an extra nanosecond.
 
 				// Set min & max if need be.
