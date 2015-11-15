@@ -9,7 +9,7 @@ import (
 const (
 	srcW   = 1000
 	srcH   = 1000
-	rounds = 2
+	rounds = 5
 )
 
 func TestBenchmark(test *testing.T) {
