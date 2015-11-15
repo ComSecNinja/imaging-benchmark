@@ -36,7 +36,7 @@ func (s Size) Eq(c Size) bool {
 	return false
 }
 
-type Results map[string][]result
+type Results map[string]map[Size]result
 
 type result struct {
 	Size Size
@@ -45,14 +45,19 @@ type result struct {
 	Avg  time.Duration
 }
 
+func (r result) Compare(e result) (speed float64) {
+	return r.Avg.Seconds() / e.Avg.Seconds()
+}
+
 func Benchmark(img image.Image, rounds int, targets ...Size) (results Results) {
 	var (
 		t  time.Time
 		Δt time.Duration
 	)
-	results = make(map[string][]result)
+	results = make(map[string]map[Size]result)
 
 	for name, filter := range filters {
+		results[name] = make(map[Size]result)
 		for _, target := range targets {
 			var (
 				r     result // The result for this filter and size.
@@ -85,8 +90,9 @@ func Benchmark(img image.Image, rounds int, targets ...Size) (results Results) {
 			// Calculate average resize time.
 			r.Avg = total / time.Duration(rounds)
 			// Append to the results
-			results[name] = append(results[name], r)
+			results[name][target] = r
 		}
 	}
+
 	return
 }
