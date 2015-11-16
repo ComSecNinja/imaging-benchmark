@@ -36,16 +36,15 @@ func (s Size) Eq(c Size) bool {
 	return false
 }
 
-type Results map[string]map[Size]result
+type Results map[string]map[Size]Result
 
-type result struct {
-	Size Size
+type Result struct {
 	Min  time.Duration
 	Max  time.Duration
 	Avg  time.Duration
 }
 
-func (r result) Compare(e result) (speed float64) {
+func (r Result) Compare(e Result) (speed float64) {
 	return r.Avg.Seconds() / e.Avg.Seconds()
 }
 
@@ -54,16 +53,15 @@ func Benchmark(img image.Image, rounds int, targets ...Size) (results Results) {
 		t  time.Time
 		Δt time.Duration
 	)
-	results = make(map[string]map[Size]result)
+	results = make(map[string]map[Size]Result)
 
 	for name, filter := range filters {
-		results[name] = make(map[Size]result)
+		results[name] = make(map[Size]Result)
 		for _, target := range targets {
 			var (
-				r     result // The result for this filter and size.
+				r     Result // The result for this filter and size.
 				total time.Duration
 			)
-			r.Size = target
 			for i := 0; i < rounds; i++ {
 				// Take resizing time
 			resize:

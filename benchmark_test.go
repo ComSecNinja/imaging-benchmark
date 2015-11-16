@@ -27,7 +27,7 @@ func TestBenchmark(test *testing.T) {
 	// Some info and formatting guides.
 	fmt.Printf("Resizing to %v, %v and %v with %d rounds!\n\n", size1, size2, size3, rounds)
 	fmt.Printf("%17s \t %9s \t %10s \t %10s \t %10s \t %10s \n", "Filter", "Target size", "Min", "Max", "Avg", "Cmp")
-	fmt.Println("--------------------------------------------------------------------------------------------------------")
+	fmt.Println("---------------------------------------------------------------------------------------------------")
 
 	startTime := time.Now()                                // Get set again...
 	results := Benchmark(img, rounds, size1, size2, size3) // Run the benchmarks.
@@ -36,7 +36,7 @@ func TestBenchmark(test *testing.T) {
 	for name, resultSet := range results { // For each filter...
 		for size, r := range resultSet { // For each result...
 			// Print 'em.
-			cmp := r.Compare(results["NearestNeighbor"][r.Size])
+			cmp := r.Compare(results["NearestNeighbor"][size])
 			fmt.Printf("%17s \t %d×%d \t %10v \t %10v \t %10v \t %10.2f \n", name, size[0], size[1], r.Min, r.Max, r.Avg, cmp)
 		}
 	}
